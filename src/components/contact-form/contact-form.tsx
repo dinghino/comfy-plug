@@ -90,11 +90,7 @@ export const ContactForm = () => {
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
           {/* Role Select */}
-          <FormFieldWrapper
-            control={form.control}
-            name="role"
-            label="I am a"
-          >
+          <FormFieldWrapper control={form.control} name="role" label="I am a">
             {(field) => (
               <Select
                 key={selectKey} // Force re-render on reset
@@ -116,46 +112,26 @@ export const ContactForm = () => {
           </FormFieldWrapper>
 
           {/* Alias Input */}
-          <FormFieldWrapper
-            control={form.control}
-            name="alias"
-            label="Alias"
-            required
-          >
+          <FormFieldWrapper control={form.control} name="alias" label="Alias" required>
             {(field) => (<Input className={cn(classes.input())} placeholder="Enter your alias" {...field} />)}
           </FormFieldWrapper>
 
-          {/* Phone Number Input */}
-          <FormFieldWrapper
-            control={form.control}
-            name="phone"
-            label="Phone Number"
-            required
-          >
-            {(field) => (
-              <Input type="tel" className={cn(classes.input())} placeholder="Enter your phone number" {...field} />
-            )}
-          </FormFieldWrapper>
-
           {/* Email Input */}
-          <FormFieldWrapper
-            control={form.control}
-            name="email"
-            label="Email"
-            required
-          >
+          <FormFieldWrapper control={form.control} name="email" label="Email" required>
             {(field) => (
               <Input type="email" className={cn(classes.input())} placeholder="Enter your email address" {...field} />
             )}
           </FormFieldWrapper>
 
+          {/* Phone Number Input */}
+          <FormFieldWrapper control={form.control} name="phone" label="Phone Number">
+            {(field) => (
+              <Input type="tel" className={cn(classes.input())} placeholder="Enter your phone number" {...field} />
+            )}
+          </FormFieldWrapper>
+
           {/* Early Access Checkbox */}
-          <FormFieldWrapper
-            control={form.control}
-            name="wantsUpdates"
-            label=""
-            className="flex flex-row items-start space-y-0 space-x-3"
-          >
+          <FormFieldWrapper control={form.control} name="wantsUpdates" label="" className="flex flex-row items-start space-y-0 space-x-3">
             {(field) => (
               <div className="flex items-start space-x-3">
                 <Checkbox checked={field.value} className={cn(classes.checkbox())} onCheckedChange={field.onChange} />
