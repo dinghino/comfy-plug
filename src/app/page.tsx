@@ -5,7 +5,7 @@ import { cn } from "@/lib/utils"
 import { tv } from "tailwind-variants"
 
 const actions: HeroCardProps['actions'] = [
-  { href: '#', children: 'Join early access', variant: 'secondary' },
+  { href: '#form', children: 'Join early access', variant: 'secondary' },
   // { href: '#', children: 'Become a partner', variant: 'outline', className: 'bg-transparent' }
 ]
 
@@ -51,7 +51,7 @@ export default async function Home() {
             <ContactForm />
           </div>
         </section>
-        <section className="bg-brand-brown py-16">
+        <section id="form" className="bg-brand-brown py-16">
           <div
             className=" opacity-50 h-24 w-full"
             style={{
