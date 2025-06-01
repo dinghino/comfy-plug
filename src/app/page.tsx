@@ -1,103 +1,70 @@
-import Image from "next/image";
+import { ContactForm } from "@/components/contact-form"
+import { HeroCard, type HeroCardProps } from "@/components/hero-card"
+import { cn } from "@/lib/utils"
+import { tv } from "tailwind-variants"
 
-export default function Home() {
+const actions: HeroCardProps['actions'] = [
+  { href: '#', children: 'Join early access', variant: 'secondary' },
+  // { href: '#', children: 'Become a partner', variant: 'outline', className: 'bg-transparent' }
+]
+
+const variants = tv({
+  slots: {
+    main: 'p-0 sm:p-4 md:p-16',
+    wrapper: 'container mx-auto overflow-hidden sm:rounded-3xl shadow-xl p-0',
+    section: 'px-4 md:px-8',
+    container: 'container mx-auto overflow-hidden sm:rounded-3xl shadow-xl p-0',
+  },
+  variants: {
+    background: {
+      primary: {
+        section: 'bg-brand-brown'
+      },
+      secondary: {
+        section: 'bg-brand-brown/50'
+      },
+    }
+  }
+})
+
+export default async function Home() {
+  const classes = variants()
   return (
-    <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
-      <main className="flex flex-col gap-[32px] row-start-2 items-center sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol className="list-inside list-decimal text-sm/6 text-center sm:text-left font-[family-name:var(--font-geist-mono)]">
-          <li className="mb-2 tracking-[-.01em]">
-            Get started by editing{" "}
-            <code className="bg-black/[.05] dark:bg-white/[.06] px-1 py-0.5 rounded font-[family-name:var(--font-geist-mono)] font-semibold">
-              src/app/page.tsx
-            </code>
-            .
-          </li>
-          <li className="tracking-[-.01em]">
-            Save and see your changes instantly.
-          </li>
-        </ol>
-
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:w-auto"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 w-full sm:w-auto md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Read our docs
-          </a>
-        </div>
-      </main>
-      <footer className="row-start-3 flex gap-[24px] flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
+    <main className={cn(classes.main())}>
+      <div className={cn(classes.wrapper())}>
+        <header className={cn(classes.section({ background: 'primary' }), "py-2 text-center")}>
+          <h1 className="text-xl font-extrabold text-brand-green">
+            ComfyPlug<sup className="text-sm">™</sup>
+          </h1>
+        </header>
+        <section className={cn(classes.section({ background: 'secondary' }), "pt-16 pb-24 md:pt-32 md:pb-72")}>
+          {/* <div> */}
+          <HeroCard
+            actions={actions}
+            title={<>Comfy is the<br /><span className="italic font-semibold text-brand-brown">new Plug</span></>}
+            description="Sit back and relax, as the black-market turns green"
           />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
+          {/* </div> */}
+        </section>
+        <section className="bg-brand-brown p-4 md:px-16 pt-32 pb-16">
+          <div className="rounded-2xl bg-brand-green-light text-brand-green p-8 -mt-48 max-w-3xl mx-auto shadow-2xl">
+            <h2 className="text-4xl font-semibold text-center mb-16">Join the waitlist</h2>
+            <ContactForm />
+          </div>
+        </section>
+        <section className="bg-brand-brown py-16">
+          <div
+            className=" opacity-50 h-24 w-full"
+            style={{
+              backgroundImage: "url('/images/coming-soon.png')",
+              backgroundRepeat: "repeat-x",
+              backgroundPosition: "center",
+              backgroundSize: "auto 100%",
+            }}
+            aria-label="Coming soon banner"
           />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
-      </footer>
-    </div>
-  );
+        </section>
+      </div>
+    </main>
+  )
 }
