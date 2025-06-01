@@ -18,12 +18,6 @@ interface WaitlistEmailProps {
 
 
 export const WaitlistEmail = ({ data }: WaitlistEmailProps) => {
-  const roleLabels = {
-    customer: 'Customer',
-    retailer: 'Retailer',
-    other: 'Other',
-  }
-
   return (
     <Html>
       <Head />
@@ -49,7 +43,7 @@ export const WaitlistEmail = ({ data }: WaitlistEmailProps) => {
           <Section style={informationTable}>
             <Text style={informationTableRow}>
               <Text style={informationTableLabel}>Role:</Text>
-              <Text style={informationTableValue}>{roleLabels[data.role] ?? 'Other role'}</Text>
+              <Text style={informationTableValue}>{data.role}</Text>
             </Text>
             <Text style={informationTableRow}>
               <Text style={informationTableLabel}>Alias:</Text>
