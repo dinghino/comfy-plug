@@ -20,7 +20,7 @@ import {
 } from '@/components/ui/select'
 
 import { ContactFormData, contactFormSchema } from '@/lib/schemas'
-import { submitWaitlistForm } from '@/app/actions/waitlist'
+import { submitWaitlistForm } from '@/lib/actions/waitlist'
 
 const roles = contactFormSchema.shape.role.options
 
