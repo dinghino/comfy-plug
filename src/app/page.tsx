@@ -1,3 +1,4 @@
+import Image from 'next/image'
 import { ContactForm } from "@/components/contact-form"
 import { HeroCard, type HeroCardProps } from "@/components/hero-card"
 import { cn } from "@/lib/utils"
@@ -33,9 +34,7 @@ export default async function Home() {
     <main className={cn(classes.main())}>
       <div className={cn(classes.wrapper())}>
         <header className={cn(classes.section({ background: 'primary' }), "py-2 text-center")}>
-          <h1 className="text-xl font-extrabold text-brand-green">
-            ComfyPlug<sup className="text-sm">™</sup>
-          </h1>
+          <Image src="/images/nav-bar-logo-small.png" alt="ComfyPlug Logo" width={215} height={32} className="inline-block py-2" />
         </header>
         <section className={cn(classes.section({ background: 'secondary' }), "pt-16 pb-24 md:pt-32 md:pb-72")}>
           {/* <div> */}
