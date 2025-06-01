@@ -5,7 +5,7 @@ import { cn } from "@/lib/utils"
 import { tv } from "tailwind-variants"
 
 const actions: HeroCardProps['actions'] = [
-  { href: '#form', children: 'Join early access', variant: 'secondary' },
+  { href: '#form', children: 'Early access', variant: 'secondary' },
   // { href: '#', children: 'Become a partner', variant: 'outline', className: 'bg-transparent' }
 ]
 
@@ -41,7 +41,7 @@ export default async function Home() {
           <HeroCard
             actions={actions}
             title={<>Comfy is the<br /><span className="italic font-semibold text-brand-brown">new Plug</span></>}
-            description="Sit back and relax, as the black-market turns green"
+            description="Sit back and relax as the black-market turns green"
           />
           {/* </div> */}
         </section>
