@@ -2,17 +2,14 @@
 
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm } from 'react-hook-form'
-import { z } from 'zod'
+import { tv } from 'tailwind-variants'
+import { cn } from '@/lib/utils'
+import { useState } from 'react'
+
 import { Button } from '@/components/ui/button'
 import { Checkbox } from '@/components/ui/checkbox'
-import {
-  Form,
-  FormControl,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from '@/components/ui/form'
+import { Form } from '@/components/ui/form'
+import { FormFieldWrapper } from './form-field-wrapper'
 import { Input } from '@/components/ui/input'
 import {
   Select,
@@ -21,43 +18,38 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select'
-import { tv } from 'tailwind-variants'
-import { cn } from '@/lib/utils'
 
-// Zod Schema
-const contactFormSchema = z.object({
-  role: z.enum(['customer', 'retailer', 'other'], {
-    required_error: 'Please select your role.',
-  }),
-  alias: z.string().min(1, {
-    message: 'Alias is required.',
-  }),
-  phone: z.string().min(1, {
-    message: 'Phone number is required.',
-  }),
-  email: z.string().email({
-    message: 'Please enter a valid email address.',
-  }),
-  wantsUpdates: z.boolean().default(false),
-})
+import { ContactFormData, contactFormSchema } from '@/lib/schemas'
+import { submitWaitlistForm } from '@/app/actions/waitlist'
 
 const roles = contactFormSchema.shape.role.options
-
-// TypeScript type
-type ContactFormData = z.input<typeof contactFormSchema>
 
 const variants = tv({
   slots: {
     input: 'w-full bg-brand-green/10 py-6 border-brand-green/20 rounded-xl text-xs md:text-sm',
     checkbox: 'bg-brand-green/10 shadow-none',
-  }
+  },
 })
 
+type SubmissionState = {
+  isSubmitting: boolean
+  message: string
+  success: boolean
+}
+
 export const ContactForm = () => {
+  const [submissionState, setSubmissionState] = useState<SubmissionState>({
+    isSubmitting: false,
+    message: '',
+    success: false,
+  })
+
+  const [selectKey, setSelectKey] = useState(0) // Key to force Select reset
+
   const form = useForm<ContactFormData>({
     resolver: zodResolver(contactFormSchema),
     defaultValues: {
-      role: undefined,
+      role: roles[0],
       alias: '',
       phone: '',
       email: '',
@@ -65,128 +57,142 @@ export const ContactForm = () => {
     },
   })
 
-  const onSubmit = (data: ContactFormData) => {
-    console.log('Form data:', data)
+  const onSubmit = async (data: ContactFormData) => {
+    setSubmissionState({ isSubmitting: true, message: '', success: false })
+
+    try {
+      // Call server action directly with validated data
+      const { success, message } = await submitWaitlistForm(data)
+
+      setSubmissionState({ isSubmitting: false, message, success })
+
+      if (success) {
+        form.reset()
+        setSelectKey(prev => prev + 1) // Force Select component to re-render
+      }
+    } catch (error) {
+      console.error('Form submission error:', error)
+      setSubmissionState({
+        isSubmitting: false,
+        message: 'Something went wrong. Please try again.',
+        success: false,
+      })
+    }
   }
 
   const classes = variants()
 
   return (
-    <div className="w-full max-w-lg mx-auto">
+    <div className="mx-auto w-full max-w-lg">
+      {/* Success/Error Messages */}
+      <SubmitResult state={submissionState} />
+
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
           {/* Role Select */}
-          <FormField
+          <FormFieldWrapper
             control={form.control}
             name="role"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>I am a</FormLabel>
-                <Select onValueChange={field.onChange} defaultValue={field.value}>
-                  <FormControl>
-                    <SelectTrigger className={cn(classes.input())}>
-                      <SelectValue placeholder="Select your role" />
-                    </SelectTrigger>
-                  </FormControl>
-                  <SelectContent>
-                    {roles.map((role) => (
-                      <SelectItem key={role} value={role}>
-                        {role.charAt(0).toUpperCase() + role.slice(1)}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-                <FormMessage />
-              </FormItem>
+            label="I am a"
+          >
+            {(field) => (
+              <Select
+                key={selectKey} // Force re-render on reset
+                onValueChange={field.onChange}
+                value={field.value}
+              >
+                <SelectTrigger className={cn(classes.input())}>
+                  <SelectValue placeholder="Select your role" />
+                </SelectTrigger>
+                <SelectContent>
+                  {roles.map((role) => (
+                    <SelectItem key={role} value={role}>
+                      {role.charAt(0).toUpperCase() + role.slice(1)}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
             )}
-          />
+          </FormFieldWrapper>
 
           {/* Alias Input */}
-          <FormField
+          <FormFieldWrapper
             control={form.control}
             name="alias"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Alias</FormLabel>
-                <FormControl>
-                  <Input className={cn(classes.input())} placeholder="Enter your alias" {...field} />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
+            label="Alias"
+            required
+          >
+            {(field) => (<Input className={cn(classes.input())} placeholder="Enter your alias" {...field} />)}
+          </FormFieldWrapper>
 
           {/* Phone Number Input */}
-          <FormField
+          <FormFieldWrapper
             control={form.control}
             name="phone"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Phone Number</FormLabel>
-                <FormControl>
-                  <Input 
-                    type="tel"
-                    className={cn(classes.input())}
-                    placeholder="Enter your phone number"
-                    {...field}
-                  />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
+            label="Phone Number"
+            required
+          >
+            {(field) => (
+              <Input type="tel" className={cn(classes.input())} placeholder="Enter your phone number" {...field} />
             )}
-          />
+          </FormFieldWrapper>
 
           {/* Email Input */}
-          <FormField
+          <FormFieldWrapper
             control={form.control}
             name="email"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Email</FormLabel>
-                <FormControl>
-                  <Input 
-                    type="email"
-                    className={cn(classes.input())}
-                    placeholder="Enter your email address" 
-                    {...field} 
-                  />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
+            label="Email"
+            required
+          >
+            {(field) => (
+              <Input type="email" className={cn(classes.input())} placeholder="Enter your email address" {...field} />
             )}
-          />
+          </FormFieldWrapper>
 
           {/* Early Access Checkbox */}
-          <FormField
+          <FormFieldWrapper
             control={form.control}
             name="wantsUpdates"
-            render={({ field }) => (
-              <FormItem className="flex flex-row items-start space-x-3 space-y-0">
-                <FormControl>
-                  <Checkbox
-                    checked={field.value}
-                    className={cn(classes.checkbox())}
-                    onCheckedChange={field.onChange}
-                  />
-                </FormControl>
+            label=""
+            className="flex flex-row items-start space-y-0 space-x-3"
+          >
+            {(field) => (
+              <div className="flex items-start space-x-3">
+                <Checkbox checked={field.value} className={cn(classes.checkbox())} onCheckedChange={field.onChange} />
                 <div className="space-y-1 leading-none">
-                  <FormLabel>
+                  <label className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">
                     I want early access and updates
-                  </FormLabel>
+                  </label>
                 </div>
-              </FormItem>
+              </div>
             )}
-          />
+          </FormFieldWrapper>
 
           {/* Submit Button */}
-          <Button 
-            type="submit" 
-            className="w-full bg-brand-green hover:bg-brand-green/90"
+          <Button
+            type="submit"
+            disabled={submissionState.isSubmitting || !form.formState.isValid}
+            className="bg-brand-green hover:bg-brand-green/90 w-full"
           >
-            Stay Plugged In
+            {submissionState.isSubmitting ? 'Joining...' : 'Stay Plugged In'}
           </Button>
         </form>
       </Form>
+    </div>
+  )
+}
+
+
+const SubmitResult = ({ state }: { state: SubmissionState }) => {
+  if (!state.message) return null
+  return (
+    <div className={cn(
+      "mb-4 p-4 rounded-lg text-sm",
+      state.success
+        ? "bg-green-50 text-green-800 border border-green-200"
+        : "bg-red-50 text-red-800 border border-red-200"
+    )}>
+      {state.message}
     </div>
   )
 }
