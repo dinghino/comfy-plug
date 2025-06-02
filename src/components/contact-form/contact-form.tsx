@@ -83,7 +83,7 @@ export const ContactForm = () => {
   const classes = variants()
 
   return (
-    <div className="mx-auto w-full max-w-lg">
+    <div className="mx-auto w-full">
       {/* Success/Error Messages */}
       <SubmitResult state={submissionState} />
 
