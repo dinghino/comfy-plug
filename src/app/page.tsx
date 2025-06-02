@@ -1,13 +1,11 @@
 import Image from 'next/image'
-import { ContactForm } from "@/components/contact-form"
-import { HeroCard, type HeroCardProps } from "@/components/hero-card"
-import { cn } from "@/lib/utils"
-import { tv } from "tailwind-variants"
+import { ContactForm } from '@/components/contact-form'
+import { HeroCard } from '@/components/hero-card'
+import { cn } from '@/lib/utils'
+import { tv } from 'tailwind-variants'
+import { FeatureCard } from '@/components/feature-card'
 
-const actions: HeroCardProps['actions'] = [
-  { href: '#waitlist', children: 'Early access', variant: 'secondary' },
-  // { href: '#', children: 'Become a partner', variant: 'outline', className: 'bg-transparent' }
-]
+import * as data from '@/data'
 
 const variants = tv({
   slots: {
@@ -19,48 +17,80 @@ const variants = tv({
   variants: {
     background: {
       primary: {
-        section: 'bg-brand-brown'
+        section: 'bg-brand-brown',
       },
       secondary: {
-        section: 'bg-brand-brown/50'
+        section: 'bg-brand-brown/50',
       },
-    }
-  }
+    },
+  },
 })
 
 export default async function Home() {
   const classes = variants()
+
+  const heroTitle = (
+    <>
+      Comfy is the
+      <br />
+      <span className="text-brand-brown font-semibold italic">new Plug</span>
+    </>
+  )
+
   return (
     <>
       <main className={cn(classes.main())}>
         <div className={cn(classes.wrapper())}>
-          <header className={cn(classes.section({ background: 'primary' }), "py-2 text-center")}>
-            <Image src="/images/nav-bar-logo-small.png" alt="ComfyPlug Logo" width={215} height={32} className="inline-block py-2" />
+          <header className={cn(classes.section({ background: 'primary' }), 'py-2 text-center')}>
+            <Image
+              src="/images/nav-bar-logo-small.png"
+              alt="ComfyPlug Logo"
+              width={215}
+              height={32}
+              className="inline-block py-2"
+            />
           </header>
-          <section className={cn(classes.section({ background: 'secondary' }), "pt-16 pb-24 md:pt-32 md:pb-48")}>
-            {/* <div> */}
+          {/* hero */}
+          <section
+            className={cn(classes.section({ background: 'secondary' }), 'py-24 pb-8 md:pt-32')}
+          >
             <HeroCard
-              actions={actions}
-              title={<>Comfy is the<br /><span className="italic font-semibold text-brand-brown">new Plug</span></>}
+              actions={data.actions}
+              title={heroTitle}
               description="Sit back and relax as the black-market turns green"
             />
-            {/* </div> */}
           </section>
-
-          <section className="bg-brand-brown p-4 md:px-16 pt-32 pb-16">
-            <div className="rounded-2xl bg-brand-green-light max-w-5xl text-brand-green p-8 px-8 md:px-24 -mt-48 mx-auto shadow-lg">
-              <h2 className="text-4xl font-semibold text-center mb-16">Join the waitlist</h2>
+          {/* features section */}
+          <section
+            className={cn(classes.section({ background: 'secondary' }), 'pt-8 pb-32 md:pb-48')}
+          >
+            <div className="container mx-auto max-w-5xl">
+              <div className="text-brand-green mb-16">
+                <h2 className="text-5xl font-semibold">How it works</h2>
+                {/* <p className="text-sm"> We are not disrupting the plug. We ARE the plug - but legal.</p> */}
+              </div>
+              <div className="grid grid-cols-1 gap-4 sm:grid-cols-3 md:gap-8">
+                {data.features.map((feature, index) => (
+                  <FeatureCard {...feature} className="" key={index} />
+                ))}
+              </div>
+            </div>
+          </section>
+          {/* waitlist */}
+          <section className="bg-brand-brown p-4 pt-32 pb-16 md:px-16">
+            <div className="bg-brand-green-light text-brand-green mx-auto -mt-48 max-w-5xl rounded-2xl p-8 px-8 shadow-lg md:px-24">
+              <h2 className="mb-16 text-center text-4xl font-semibold">Join the waitlist</h2>
               <ContactForm />
             </div>
           </section>
           <footer id="waitlist" className="bg-brand-brown py-16">
             <div
-              className=" opacity-50 h-24 w-full"
+              className="h-24 w-full opacity-50"
               style={{
                 backgroundImage: "url('/images/coming-soon.png')",
-                backgroundRepeat: "repeat-x",
-                backgroundPosition: "center",
-                backgroundSize: "auto 100%",
+                backgroundRepeat: 'repeat-x',
+                backgroundPosition: 'center',
+                backgroundSize: 'auto 100%',
               }}
               aria-label="Coming soon banner"
             />

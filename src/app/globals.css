@@ -44,6 +44,8 @@
 
   --color-brand-green: #1b4436;
   --color-brand-green-foreground: var(--primary-foreground);
+  --color-brand-green-alt: #45703b;
+  --color-brand-green-alt-foreground: var(--primary-foreground);
   
   --color-brand-green-light: #c6d6b1;
   --color-brand-green-light-foreground: var(--color-brand-green);

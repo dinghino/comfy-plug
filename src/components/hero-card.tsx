@@ -59,10 +59,15 @@ export const HeroCard: React.FC<HeroCardProps> = async (props) => {
   return (
     <Card className={cn(classes.card(), 'pt-0')}>
       <div className={cn(classes.container())}>
-
         {/* Mobile Image - Shows on mobile/tablet only */}
         <div className={cn(classes.image({ mobile: true }))}>
-          <Image src={image} alt="Hero Image" fill className="object-cover object-top" />
+          <Image
+            src={image}
+            alt="Hero Image"
+            fill
+            sizes="(max-width: 640px) 100vw, (min-width: 641px) 50vw"
+            className="object-cover object-top"
+          />
         </div>
 
         {/* Content - Responsive layout */}
