@@ -57,7 +57,7 @@ export default async function Home() {
             <HeroCard
               actions={data.actions}
               title={heroTitle}
-              description="Sit back and relax as the black-market turns green"
+              description="Sit back and relax as the grey-market turns green"
             />
           </section>
           {/* features section */}
