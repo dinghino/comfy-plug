@@ -15,8 +15,6 @@ interface WaitlistEmailProps {
   data: ContactFormData
 }
 
-
-
 export const WaitlistEmail = ({ data }: WaitlistEmailProps) => {
   return (
     <Html>
@@ -33,9 +31,9 @@ export const WaitlistEmail = ({ data }: WaitlistEmailProps) => {
               style={logo}
             />
           </Section>
-          
+
           <Heading style={h1}>New Waitlist Signup</Heading>
-          
+
           <Text style={text}>
             Someone just joined the ComfyPlug waitlist! Here are the details:
           </Text>
@@ -57,21 +55,19 @@ export const WaitlistEmail = ({ data }: WaitlistEmailProps) => {
               <Text style={informationTableLabel}>Phone:</Text>
               <Text style={informationTableValue}>{data.phone}</Text>
             </Text>
-            <Text style={informationTableRow}>
+            {/* <Text style={informationTableRow}>
               <Text style={informationTableLabel}>Wants Updates:</Text>
               <Text style={informationTableValue}>{data.wantsUpdates ? 'Yes' : 'No'}</Text>
-            </Text>
+            </Text> */}
           </Section>
-
+          {/* 
           <Text style={text}>
             {data.wantsUpdates && (
               "This person has opted in to receive updates about ComfyPlug's launch and early access opportunities."
             )}
-          </Text>
+          </Text> */}
 
-          <Text style={footer}>
-            Sent from ComfyPlug Waitlist System
-          </Text>
+          <Text style={footer}>Sent from ComfyPlug Waitlist System</Text>
         </Container>
       </Body>
     </Html>

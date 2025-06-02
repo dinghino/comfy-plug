@@ -7,7 +7,6 @@ import { cn } from '@/lib/utils'
 import { useState } from 'react'
 
 import { Button } from '@/components/ui/button'
-import { Checkbox } from '@/components/ui/checkbox'
 import { Form } from '@/components/ui/form'
 import { FormFieldWrapper } from './form-field-wrapper'
 import { Input } from '@/components/ui/input'
@@ -53,7 +52,6 @@ export const ContactForm = () => {
       alias: '',
       phone: '',
       email: '',
-      wantsUpdates: false,
     },
   })
 
@@ -68,7 +66,7 @@ export const ContactForm = () => {
 
       if (success) {
         form.reset()
-        setSelectKey(prev => prev + 1) // Force Select component to re-render
+        setSelectKey((prev) => prev + 1) // Force Select component to re-render
       }
     } catch (error) {
       console.error('Form submission error:', error)
@@ -83,7 +81,12 @@ export const ContactForm = () => {
   const classes = variants()
 
   return (
-    <div className="mx-auto w-full">
+    <div className="relative mx-auto w-full">
+      {submissionState.success && (
+        <div className="bg-brand-green-light absolute inset-0 z-50 grid place-items-center">
+          <h2 className="text-brand-green text-xl font-semibold">Thank you for signing up!</h2>
+        </div>
+      )}
       {/* Success/Error Messages */}
       <SubmitResult state={submissionState} />
 
@@ -113,36 +116,48 @@ export const ContactForm = () => {
 
           {/* Alias Input */}
           <FormFieldWrapper control={form.control} name="alias" label="Alias" required>
-            {(field) => (<Input className={cn(classes.input())} placeholder="Enter your alias" {...field} />)}
+            {(field) => (
+              <Input className={cn(classes.input())} placeholder="Enter your alias" {...field} />
+            )}
           </FormFieldWrapper>
 
           {/* Email Input */}
           <FormFieldWrapper control={form.control} name="email" label="Email" required>
             {(field) => (
-              <Input type="email" className={cn(classes.input())} placeholder="Enter your email address" {...field} />
+              <Input
+                type="email"
+                className={cn(classes.input())}
+                placeholder="Enter your email address"
+                {...field}
+              />
             )}
           </FormFieldWrapper>
 
           {/* Phone Number Input */}
           <FormFieldWrapper control={form.control} name="phone" label="Phone Number">
             {(field) => (
-              <Input type="tel" className={cn(classes.input())} placeholder="Enter your phone number" {...field} />
+              <Input
+                type="tel"
+                className={cn(classes.input())}
+                placeholder="Enter your phone number"
+                {...field}
+              />
             )}
           </FormFieldWrapper>
 
           {/* Early Access Checkbox */}
-          <FormFieldWrapper control={form.control} name="wantsUpdates" label="" className="flex flex-row items-start space-y-0 space-x-3">
+          {/* <FormFieldWrapper control={form.control} name="wantsUpdates" label="" className="flex flex-row items-start space-y-0 space-x-3">
             {(field) => (
               <div className="flex items-start space-x-3">
                 <Checkbox checked={field.value} className={cn(classes.checkbox())} onCheckedChange={field.onChange} />
                 <div className="space-y-1 leading-none">
                   <label className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">
-                    I want early access and updates
+                    Send me updates
                   </label>
                 </div>
               </div>
             )}
-          </FormFieldWrapper>
+          </FormFieldWrapper> */}
 
           {/* Submit Button */}
           <Button
@@ -158,16 +173,17 @@ export const ContactForm = () => {
   )
 }
 
-
 const SubmitResult = ({ state }: { state: SubmissionState }) => {
   if (!state.message) return null
   return (
-    <div className={cn(
-      "mb-4 p-4 rounded-lg text-sm",
-      state.success
-        ? "bg-green-50 text-green-800 border border-green-200"
-        : "bg-red-50 text-red-800 border border-red-200"
-    )}>
+    <div
+      className={cn(
+        'mb-4 rounded-lg p-4 text-sm',
+        state.success
+          ? 'border border-green-200 bg-green-50 text-green-800'
+          : 'border border-red-200 bg-red-50 text-red-800'
+      )}
+    >
       {state.message}
     </div>
   )

@@ -12,7 +12,7 @@ export const contactFormSchema = z.object({
   email: z.string().email({
     message: 'Please enter a valid email address.',
   }),
-  wantsUpdates: z.boolean().default(false),
+  // wantsUpdates: z.boolean().default(false),
 })
 
 export type ContactFormData = z.input<typeof contactFormSchema>
