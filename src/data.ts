@@ -15,7 +15,7 @@ export const features: FeatureCardProps[] = [
   {
     icon: 'tree-pine',
     title: 'We pack and ship',
-    children: 'Your order is fulfilled by licensed partner - no stress',
+    children: 'Your order is fulfilled by licensed partners - no stress',
     background: 'dark',
   },
   {
